@@ -8,6 +8,7 @@ public class LessonServiceImpl implements LessonService {
     final LessonRepository lessonRepository;
 
     public LessonServiceImpl(LessonRepository lessonRepository) {
+
         this.lessonRepository = lessonRepository;
     }
 }

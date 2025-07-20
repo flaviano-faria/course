@@ -8,6 +8,7 @@ public class CourseServiceImpl implements CourseService {
     final CourseRepository courseRepository;
 
     public CourseServiceImpl(CourseRepository courseRepository) {
+
         this.courseRepository = courseRepository;
     }
 }

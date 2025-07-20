@@ -8,6 +8,7 @@ public class ModuleServiceImpl implements ModuleService {
     final ModuleRepository moduleRepository;
 
     public ModuleServiceImpl(ModuleRepository moduleRepository) {
+
         this.moduleRepository = moduleRepository;
     }
 }
