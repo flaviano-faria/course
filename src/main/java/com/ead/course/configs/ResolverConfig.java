@@ -1,6 +1,5 @@
 package com.ead.course.configs;
 
-import com.ead.course.services.CourseService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
