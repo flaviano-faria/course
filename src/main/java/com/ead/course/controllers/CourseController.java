@@ -3,6 +3,7 @@ package com.ead.course.controllers;
 import com.ead.course.dtos.CourseRecordDTO;
 import com.ead.course.models.CourseModel;
 import com.ead.course.services.CourseService;
+import com.ead.course.services.ModuleService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,4 +63,17 @@ public class CourseController {
                         courseRecordDTO, courseService.findById(courseId).get()));
     }
 
+    @RestController
+    public static class ModuleController {
+
+        final ModuleService moduleService;
+        final CourseService courseService;
+
+        public ModuleController(ModuleService moduleService, CourseService courseService) {
+            this.moduleService = moduleService;
+            this.courseService = courseService;
+        }
+
+
+    }
 }
