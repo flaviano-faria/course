@@ -1,16 +1,16 @@
 package com.ead.course.controllers;
 
 import com.ead.course.dtos.ModuleRecordDTO;
+import com.ead.course.models.CourseModel;
+import com.ead.course.models.ModuleModel;
 import com.ead.course.services.CourseService;
 import com.ead.course.services.ModuleService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -34,4 +34,22 @@ public class ModuleController {
                 .body( moduleService.save(
                         moduleRecordDTO, courseService.findById(courseId).get()));
     }
+
+    @GetMapping("/courses/{courseId}/modules")
+    public ResponseEntity<List<ModuleModel>> getAllModules(
+            @PathVariable(value = "courseId") UUID courseId){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(moduleService.findAllModulesIntoCourse(courseId));
+    }
+
+    @GetMapping("/courses/{courseId}/modules/{moduleId}")
+    public ResponseEntity<Object> getOneModule(
+            @PathVariable(value = "courseId")UUID courseId,
+            @PathVariable(value = "moduleId")UUID moduleId){
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(moduleService.findModuleIntoCourse(courseId, moduleId));
+    }
 }
+
+
