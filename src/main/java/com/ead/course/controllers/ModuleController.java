@@ -1,7 +1,6 @@
 package com.ead.course.controllers;
 
 import com.ead.course.dtos.ModuleRecordDTO;
-import com.ead.course.models.CourseModel;
 import com.ead.course.models.ModuleModel;
 import com.ead.course.services.CourseService;
 import com.ead.course.services.ModuleService;
