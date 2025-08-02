@@ -51,7 +51,7 @@ public class ModuleController {
     }
 
     @DeleteMapping("/courses/{courseId}/modules/{moduleId}")
-    public ResponseEntity<Object> deleteCourse(@PathVariable(value = "courseId") UUID courseId,
+    public ResponseEntity<Object> deleteModule(@PathVariable(value = "courseId") UUID courseId,
                                                @PathVariable(value = "moduleId")UUID moduleId){
 
         moduleService.delete(moduleService.findModuleIntoCourse(courseId, moduleId).get());
