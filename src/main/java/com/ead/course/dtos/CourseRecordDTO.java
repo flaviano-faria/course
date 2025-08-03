@@ -8,15 +8,15 @@ import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public record CourseRecordDTO(
-                              @NotBlank
+                              @NotBlank(message="name is required")
                               String name,
-                              @NotBlank
+                              @NotBlank(message="description is required")
                               String description,
-                              @NotNull
+                              @NotBlank(message="courseStatus is required")
                               CourseStatus courseStatus,
-                              @NotNull
+                              @NotBlank(message="courseLevel is required")
                               CourseLevel courseLevel,
-                              @NotNull
+                              @NotBlank(message="userInstructor is required")
                               UUID userInstructor,
 
                               String imageUrl) {}
