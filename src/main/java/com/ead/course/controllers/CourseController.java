@@ -6,6 +6,8 @@ import com.ead.course.services.CourseService;
 import com.ead.course.services.ModuleService;
 import com.ead.course.specifications.SpecificationTemplate;
 import jakarta.validation.Valid;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -17,7 +19,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/courses")
 public class CourseController {
-
+    Logger logger = LogManager.getLogger(CourseController.class);
     final CourseService courseService;
 
     public CourseController(CourseService courseService) {
@@ -32,7 +34,7 @@ public class CourseController {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body("course name already exists");
         }
-
+        logger.debug("POST saveCourse received userRecordDTO: {}", courseRecordDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(courseService.save(courseRecordDTO));
     }
@@ -47,7 +49,7 @@ public class CourseController {
     @GetMapping("/{courseId}")
     public ResponseEntity<Object> getOneCourse(
             @PathVariable(value = "courseId")UUID courseId){
-
+        logger.debug("GET getOneCourse received courseId: {}", courseId);
         return ResponseEntity.status(HttpStatus.OK).body(courseService.findById(courseId).get());
     }
 
@@ -55,6 +57,7 @@ public class CourseController {
     public ResponseEntity<Object> deleteCourse(@PathVariable(value = "courseId") UUID courseId){
 
         courseService.delete(courseService.findById(courseId).get());
+        logger.debug("DELETE deleteCourse received courseId: {}", courseId);
         return ResponseEntity.status(HttpStatus.OK).body("Course successfully deleted");
     }
 
