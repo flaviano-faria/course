@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
@@ -43,5 +44,18 @@ public class AuthUserClient {
             throw new RuntimeException(e);
         }
 
+    }
+    
+    public ResponseEntity<UserRecordDto> getOneUserById(UUID userId) {
+
+        String url = baseUrlAuthUser + "/users/" +userId;
+
+        return restClient.get()
+                .uri(url)
+                .retrieve()
+                .onStatus(status -> status.value() == 404, (request, response) ->{
+                     logger.error("Error: user not found {}", userId);
+                     throw new RuntimeException("Error: user not found " + userId);
+                }).toEntity(UserRecordDto.class);
     }
 }
