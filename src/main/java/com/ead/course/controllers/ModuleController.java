@@ -6,6 +6,8 @@ import com.ead.course.services.CourseService;
 import com.ead.course.services.ModuleService;
 import com.ead.course.specifications.SpecificationTemplate;
 import jakarta.validation.Valid;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,8 @@ import java.util.UUID;
 
 @RestController
 public class ModuleController {
+
+    Logger logger = LogManager.getLogger(ModuleController.class);
 
     final ModuleService moduleService;
     final CourseService courseService;

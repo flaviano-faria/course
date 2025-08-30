@@ -28,7 +28,7 @@ public class ResponsePageDto<T> extends PageImpl<T> {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class PageMetadata {
         private final int size;
-        private final int totalElements;
+        private final long totalElements;
         private final int totalPages;
         private final int number;
 
@@ -36,7 +36,7 @@ public class ResponsePageDto<T> extends PageImpl<T> {
 
         public PageMetadata(
                 @JsonProperty("size") int size,
-                @JsonProperty("totalElements") int totalElements,
+                @JsonProperty("totalElements") long totalElements,
                 @JsonProperty("totalPages") int totalPages,
                 @JsonProperty("number") int number
         ) {
@@ -50,7 +50,7 @@ public class ResponsePageDto<T> extends PageImpl<T> {
             return size;
         }
 
-        public int getTotalElements() {
+        public long getTotalElements() {
             return totalElements;
         }
 
