@@ -5,6 +5,7 @@ import com.ead.course.models.CourseModel;
 import com.ead.course.services.CourseService;
 import com.ead.course.services.ModuleService;
 import com.ead.course.specifications.SpecificationTemplate;
+import com.ead.course.validations.CourseValidator;
 import jakarta.validation.Valid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,9 +22,11 @@ import java.util.UUID;
 public class CourseController {
     Logger logger = LogManager.getLogger(CourseController.class);
     final CourseService courseService;
+    final CourseValidator courseValidator;
 
-    public CourseController(CourseService courseService) {
+    public CourseController(CourseService courseService, CourseValidator courseValidator) {
         this.courseService = courseService;
+        this.courseValidator = courseValidator;
     }
 
     @PostMapping

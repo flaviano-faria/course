@@ -40,7 +40,7 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public List<LessonModel> findAllLessonsIntoModule(UUID moduleId) {
-        return lessonRepository.findAllLessonsByModule(moduleId);
+        return lessonRepository.findAllLessonsIntoModule(moduleId);
     }
 
     @Override

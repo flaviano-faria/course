@@ -65,6 +65,7 @@ private static final long serialVersionUID = 1L;
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     @Fetch(FetchMode.SUBSELECT)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<ModuleModel> modules;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

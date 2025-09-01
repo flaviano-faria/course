@@ -60,7 +60,6 @@ public class CourseUserController {
         if(responseUser.getBody().userStatus().equals(UserStatus.BLOCKED)){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: User is blocked");
         }
-
         CourseUserModel courseUserModel = courseUserService.saveAndSendSubscriptionUserInCourse(
                 courseModelOptional.get().convertToUserModel(subscriptionRecordDto.userId()));
 
