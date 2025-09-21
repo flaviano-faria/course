@@ -35,7 +35,7 @@ public class CourseUserController {
         this.courseUserService = courseUserService;
     }
 
-    @GetMapping("/courses/{courseId/users}")
+    @GetMapping("/courses/{courseId}/{users}")
     public ResponseEntity<Page<UserRecordDto>> getAllUsersByCourse(@PageableDefault(sort = "userId",
     direction = Sort.Direction.ASC) Pageable pageable, @PathVariable(value = "courseId") UUID courseId){
 
