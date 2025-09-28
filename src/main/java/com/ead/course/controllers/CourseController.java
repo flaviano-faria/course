@@ -47,9 +47,7 @@ public class CourseController {
             SpecificationTemplate.CourseSpec spec, Pageable pageable,
             @RequestParam(required = false) UUID userId){
 
-        Page<CourseModel> courseModelPage = (userId !=null)
-                ? courseService.findAll(SpecificationTemplate.courseUserId(userId).and(spec), pageable)
-                : courseService.findAll(spec, pageable);
+        Page<CourseModel> courseModelPage =  courseService.findAll(spec, pageable);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(courseService.findAll(spec, pageable));
     }

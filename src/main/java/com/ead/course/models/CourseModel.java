@@ -67,15 +67,6 @@ private static final long serialVersionUID = 1L;
     @Fetch(FetchMode.SUBSELECT)
 //    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<ModuleModel> modules;
-
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
-    private Set<CourseUserModel> coursesUsers;
-
-    public CourseUserModel convertToUserModel(UUID userId) {
-        return new CourseUserModel(null, userId, this);
-    }
-
 }
 
 
