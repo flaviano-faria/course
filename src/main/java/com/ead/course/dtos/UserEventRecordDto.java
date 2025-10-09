@@ -1,5 +1,8 @@
 package com.ead.course.dtos;
 
+import com.ead.course.models.UserModel;
+import org.springframework.beans.BeanUtils;
+
 import java.util.UUID;
 
 public record UserEventRecordDto(
@@ -12,4 +15,10 @@ public record UserEventRecordDto(
         String phoneNumber,
         String imageUrl,
         String actionType) {
+
+    public UserModel toUserModel(){
+        var userModel = new UserModel();
+        BeanUtils.copyProperties(this, userModel);
+        return userModel;
+    }
 }

@@ -1,8 +1,9 @@
 package com.ead.course.consumers;
 
 import com.ead.course.dtos.UserEventRecordDto;
+import com.ead.course.enums.ActionType;
 import com.ead.course.services.UserService;
-import org.hibernate.validator.constraints.Range;
+import com.netflix.appinfo.InstanceInfo;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
@@ -27,6 +28,10 @@ public class UserConsumer {
         )
     )
     public void listenUserEvent(@Payload UserEventRecordDto userEventRecordDto) {
+        var userModel = userEventRecordDto.toUserModel();
 
+        switch (ActionType.valueOf(userEventRecordDto.actionType())){
+            case CREATE -> userService.save(userModel);
+        }
     }
 }
