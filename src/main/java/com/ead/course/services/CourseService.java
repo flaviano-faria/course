@@ -2,6 +2,7 @@ package com.ead.course.services;
 
 import com.ead.course.dtos.CourseRecordDTO;
 import com.ead.course.models.CourseModel;
+import com.ead.course.models.UserModel;
 import com.ead.course.specifications.SpecificationTemplate;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -30,4 +31,6 @@ public interface CourseService {
     CourseModel update(@Valid CourseRecordDTO courseRecordDTO, CourseModel courseModel);
 
     boolean existsByCourseAndUser(UUID courseId, @NotNull(message = "UserId is required") UUID userId);
+
+    void saveSubscriptionInCourse(CourseModel courseModel, UserModel userModel);
 }
