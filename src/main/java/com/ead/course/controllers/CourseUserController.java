@@ -2,6 +2,7 @@ package com.ead.course.controllers;
 
 import com.ead.course.dtos.SubscriptionRecordDto;
 import com.ead.course.models.CourseModel;
+import com.ead.course.models.UserModel;
 import com.ead.course.services.CourseService;
 import com.ead.course.services.UserService;
 import com.ead.course.specifications.SpecificationTemplate;
@@ -43,6 +44,12 @@ public class CourseUserController {
                                                            @RequestBody @Valid SubscriptionRecordDto subscriptionRecordDto){
 
         Optional<CourseModel> courseModelOptional = courseService.findById(courseId);
+        Optional<UserModel> optionalUserModelOptional = userService.findById(
+                subscriptionRecordDto.userId());
+
+        if(courseService.existsByCourseAndUser(courseId, subscriptionRecordDto.userId())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: subscription already exists");
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body("");
     }
 }
