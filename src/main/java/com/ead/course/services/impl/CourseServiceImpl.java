@@ -1,16 +1,22 @@
 package com.ead.course.services.impl;
 
 import com.ead.course.dtos.CourseRecordDTO;
+import com.ead.course.dtos.NotificationRecordCommandDto;
 import com.ead.course.exceptions.NotFoundException;
 import com.ead.course.models.CourseModel;
 import com.ead.course.models.LessonModel;
 import com.ead.course.models.ModuleModel;
 import com.ead.course.models.UserModel;
+import com.ead.course.publishers.NotificationCommandPublisher;
 import com.ead.course.repositories.CourseRepository;
 import com.ead.course.repositories.LessonRepository;
 import com.ead.course.repositories.ModuleRepository;
 import com.ead.course.services.CourseService;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,17 +29,21 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class CourseServiceImpl implements CourseService {
 
+    Logger logger = LogManager.getLogger(CourseServiceImpl.class);
     final CourseRepository courseRepository;
     final ModuleRepository moduleRepository;
     final LessonRepository lessonRepository;
+    final NotificationCommandPublisher  notificationCommandPublisher;
 
-    public CourseServiceImpl(CourseRepository courseRepository, ModuleRepository moduleRepository, LessonRepository lessonRepository) {
+    public CourseServiceImpl(CourseRepository courseRepository, ModuleRepository moduleRepository, LessonRepository lessonRepository, NotificationCommandPublisher notificationCommandPublisher) {
         this.courseRepository = courseRepository;
         this.moduleRepository = moduleRepository;
         this.lessonRepository = lessonRepository;
+        this.notificationCommandPublisher = notificationCommandPublisher;
     }
 
     @Transactional
@@ -99,5 +109,16 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public void saveSubscriptionInCourse(CourseModel courseModel, UserModel userModel) {
         courseRepository.saveCourseUser(courseModel.getCourseId(), userModel.getUserId());
+
+        try {
+            var notificationCommandDto = new NotificationRecordCommandDto(
+                    "welcome to course",
+                    "user"+ userModel.getFullName(),
+                    userModel.getUserId()
+            );
+            notificationCommandPublisher.publishNotificationCommand(notificationCommandDto);
+        } catch (Exception e) {
+            logger.error("error on saveSubscriptionInCourse");
+        }
     }
 }
