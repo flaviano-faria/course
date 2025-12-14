@@ -1,5 +1,7 @@
 package com.ead.course.validations;
 
+import com.ead.course.configs.security.AuthenticationCurrentUserService;
+import com.ead.course.configs.security.UserDetailsImpl;
 import com.ead.course.dtos.CourseRecordDTO;
 import com.ead.course.enums.UserType;
 import com.ead.course.models.UserModel;
@@ -8,6 +10,8 @@ import com.ead.course.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -23,11 +27,14 @@ public class CourseValidator implements Validator {
     private final Validator validator;
     final CourseService courseService;
     final UserService userService;
+    final AuthenticationCurrentUserService authenticationCurrentUserService;
 
-    public CourseValidator(@Qualifier("defaultValidator") Validator validator, CourseService courseService, UserService userService) {
+    public CourseValidator(@Qualifier("defaultValidator") Validator validator, CourseService courseService, UserService userService,
+                           AuthenticationCurrentUserService authenticationCurrentUserService) {
         this.validator = validator;
         this.courseService = courseService;
         this.userService = userService;
+        this.authenticationCurrentUserService = authenticationCurrentUserService;
     }
 
     @Override
@@ -53,13 +60,16 @@ public class CourseValidator implements Validator {
     }
 
     private void validateUserInstructor(UUID userInstructor, Errors errors){
-        Optional<UserModel> userModelOptional = userService.findById(userInstructor);
-
-        if(userModelOptional.get().getUserType().equals(UserType.STUDENT.toString()) ||
-            userModelOptional.get().getUserType().equals(UserType.USER.toString())){
-            errors.rejectValue("userInstructor", "UserInstructorError",
-                    "User must be ADMIN or INSTRUCTOR");
-            logger.error("Error validation userInstructor: {} ", userInstructor);
+        UserDetailsImpl userDetails = authenticationCurrentUserService.getCurrentUser();
+        if(userDetails.getUserId().equals(userInstructor) || userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            Optional<UserModel> userModelOptional = userService.findById(userInstructor);
+            if (userModelOptional.get().getUserType().equals(UserType.STUDENT.toString()) ||
+                    userModelOptional.get().getUserType().equals(UserType.USER.toString())) {
+                errors.rejectValue("userInstructor", "UserInstructorError", "User must be INSTRUCTOR or ADMIN.");
+                logger.error("Error validation userInstructor: {} ", userInstructor);
+            }
+        } else {
+            throw new AccessDeniedException("Forbidden");
         }
     }
 
